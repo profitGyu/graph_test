@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        #chartdiv {
+          width: 100%;
+          height:500px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chartdiv"></div>
+</body>
+
+<!--참조 사이트
+https://jsfiddle.net/pkuqf4cw/25/
+https://codepen.io/team/amcharts/pen/pooByXV
+-->
+
+
+
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    const ROOT_PATH = location.protocol + '//' + location.host
+    console.log(ROOT_PATH)
+    $.ajax({
+        url: ROOT_PATH+'/api/v1',
+        type:"GET",
+        data:{
+
+        },
+        dataType:'json',
+        success:function(data){
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+        console.log(data)
+        var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
+
+        var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
+        networkSeries.dataFields.linkWith = "linkWith";
+        networkSeries.dataFields.name = "name";
+        networkSeries.dataFields.id = "name";
+        networkSeries.dataFields.value = "value";
+        networkSeries.dataFields.children = "children";
+        networkSeries.dataFields.color = "color"
+        networkSeries.maxLevels =1
+        networkSeries.nodes.template.label.text = "{name}"
+        networkSeries.fontSize = 15;
+        networkSeries.linkWithStrength = 0;
+
+        var nodeTemplate = networkSeries.nodes.template;
+        nodeTemplate.tooltipText = "{name}";
+        nodeTemplate.fillOpacity = 1;
+        nodeTemplate.label.hideOversized = true;
+        nodeTemplate.label.truncate = true;
+
+
+        chart.legend = new am4charts.Legend();
+
+
+        var linkTemplate = networkSeries.links.template;
+        linkTemplate.strokeWidth = 1;
+        var linkHoverState = linkTemplate.states.create("hover");
+        linkHoverState.properties.strokeOpacity = 1;
+        linkHoverState.properties.strokeWidth = 2;
+        networkSeries.data =data
+        nodeTemplate.events.on("over", function (event) {
+            var dataItem = event.target.dataItem;
+            dataItem.childLinks.each(function (link) {
+                link.isHover = true;
+            })
+        })
+
+        nodeTemplate.events.on("out", function (event) {
+            var dataItem = event.target.dataItem;
+            dataItem.childLinks.each(function (link) {
+                link.isHover = false;
+            })
+        })
+
+        }
+
+    })
+
+</script>
+
+
+</html>
