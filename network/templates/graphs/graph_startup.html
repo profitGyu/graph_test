@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,20 +11,58 @@
 
         #chartdiv {
           width: 100%;
-          height:500px;
+          height:1000px;
         }
     </style>
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
+    <form class="row g-3" method="post" id="foo" action="javascript:local();">
+      <div class="col-auto">
+        <label for="company" class="visually-hidden">기업명,키워드</label>
+        <input type="text" class="form-control" id="company" placeholder="기업명,키워드">
+      </div>
+      <div class="col-auto">
+        <label for="industrial" class="visually-hidden">산업분류</label>
+        <input type="text" class="form-control" id="industrial" placeholder="산업분류">
+      </div>
+       <div class="col-auto">
+        <label for="phase" class="visually-hidden">투자단계</label>
+        <input type="text" class="form-control" id="phase" placeholder="투자단계">
+      </div>
+      <div class="col-auto">
+        <label for="capital" class="visually-hidden">투자금액</label>
+        <input type="text" class="form-control" id="capital" placeholder="투자금액">
+      </div>
+      <div class="col-auto">
+    <select class="select" multiple>
+      <option value="1">One</option>
+      <option value="2">Two</option>
+      <option value="3">Three</option>
+      <option value="4">Four</option>
+      <option value="5">Five</option>
+      <option value="6">Six</option>
+      <option value="7">Seven</option>
+      <option value="8">Eight</option>
+    </select>
+  </div>
+  <br><br>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-3">검색</button>
+      </div>
+    </form>
+
     <div id="chartdiv"></div>
+
 </body>
+
+
 
 <!--참조 사이트
 https://jsfiddle.net/pkuqf4cw/25/
 https://codepen.io/team/amcharts/pen/pooByXV
 -->
-
-
 
 <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
@@ -31,69 +70,8 @@ https://codepen.io/team/amcharts/pen/pooByXV
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-    const ROOT_PATH = location.protocol + '//' + location.host
-    console.log(ROOT_PATH)
-    $.ajax({
-        url: ROOT_PATH+'/api/v1',
-        type:"GET",
-        data:{
-
-        },
-        dataType:'json',
-        success:function(data){
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-        console.log(data)
-        var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
-
-        var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
-        networkSeries.dataFields.linkWith = "linkWith";
-        networkSeries.dataFields.name = "name";
-        networkSeries.dataFields.id = "name";
-        networkSeries.dataFields.value = "value";
-        networkSeries.dataFields.children = "children";
-        networkSeries.dataFields.color = "color"
-        networkSeries.maxLevels =1
-        networkSeries.nodes.template.label.text = "{name}"
-        networkSeries.fontSize = 15;
-        networkSeries.linkWithStrength = 0;
-
-        var nodeTemplate = networkSeries.nodes.template;
-        nodeTemplate.tooltipText = "{name}";
-        nodeTemplate.fillOpacity = 1;
-        nodeTemplate.label.hideOversized = true;
-        nodeTemplate.label.truncate = true;
-
-
-        chart.legend = new am4charts.Legend();
-
-
-        var linkTemplate = networkSeries.links.template;
-        linkTemplate.strokeWidth = 1;
-        var linkHoverState = linkTemplate.states.create("hover");
-        linkHoverState.properties.strokeOpacity = 1;
-        linkHoverState.properties.strokeWidth = 2;
-        networkSeries.data =data
-        nodeTemplate.events.on("over", function (event) {
-            var dataItem = event.target.dataItem;
-            dataItem.childLinks.each(function (link) {
-                link.isHover = true;
-            })
-        })
-
-        nodeTemplate.events.on("out", function (event) {
-            var dataItem = event.target.dataItem;
-            dataItem.childLinks.each(function (link) {
-                link.isHover = false;
-            })
-        })
-
-        }
-
-    })
-
-</script>
-
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="{%static 'graph/test.js'%}"></script>
 
 </html>
