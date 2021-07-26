@@ -27,3 +27,12 @@ def startup_graph(request):
     if ''.join(list(query.values())) == "": # 아무런 조건도 없으면 query 를 넘기지 않는다.
         return render(request, 'graphs/graph_startup.html', {"menu":"startup"})
     return render(request, 'graphs/graph_startup.html', {'query':query, "menu":"startup"})
+
+@csrf_exempt
+def base_graph(request):
+
+    return render(request, 'network/index.html')
+
+def test(request):
+
+    return render(request, 'network/test.html')

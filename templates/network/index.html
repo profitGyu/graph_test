@@ -1,0 +1,682 @@
+{% load static %}
+{% include 'base/header.html'%}
+<link rel="stylesheet" href="{%static '/network/css/network.css'%}">
+<link rel="stylesheet" href="{%static '/assets/vendor/ion-rangeslider/css/ion.rangeSlider.css'%}">
+{% block content%}
+    <div id="undernav">
+    <!-- 대분류      -->
+    <div class="container">
+        <div class="list-group">
+          <a><img src="{% static '/assets/icons/ico_home.png' %}" alt="Logo"> > 스타트업 네트워크</a>
+          <h2>스타트업 네트워크</h2>
+        </div>
+    </div>
+
+    </div>
+    <div id="searchForm">
+        <div class="container">
+            <form action="javascript:local();" method="post">
+                <div class="row">
+                    <!--  기업 키워드 검색바 -->
+                    <div class="col-3">
+                     <div class="input-group-flush mb-0 input-group">
+                         <span class="input-group-addon">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        <br>
+                        <input id="company" type="text" class="form-control" placeholder="기업명,키워드를 입력하세요" aria-label="company">
+                    </div>
+                </div>
+                    <div class="vl col-2 hs-unfold">
+                        <a id="industral"class="js-hs-unfold-invoker btn btn-block btn-sm btn-white dropdown-toggle" href="javascript:;"
+                           data-hs-unfold-options='{
+                            "target": "#industal",
+                            "type": "css-animation",
+                            "animationIn": "slideInUp"
+                           }'>산업 분류
+                        </a>
+
+                        <div id="industal" class="hs-unfold-content dropdown-menu dropdown-menu-sm-right dropdown-card" style="min-width: 600px;">
+                         <!-- Card -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>산업 분류를 선택해주세요</h3>
+                            <span>여러 개의 산업분류를 선택할 수 있습니다.</span>
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="form-check btn icon-btn">
+                              <input class="form-check-input" type="checkbox" name="phase" value="1" id="industrialDiv_1">
+                              <label class="form-check-label" for="all" value="전체선택">패션/추천</label>
+                            </div>
+                            <div class="form-check btn icon-btn">
+                              <input class="form-check-input " type="checkbox" name="phase" value="1" id="industrialDiv_2">
+                              <label class="form-check-label" for="all" value="전체선택">카테고리</label>
+                            </div>
+                            <div class="form-check btn icon-btn">
+                              <input class="form-check-input" type="checkbox" name="phase" value="1" id="industrialDiv_3">
+                              <label class="form-check-label" for="all" value="전체선택">전체선택</label>
+                            </div>
+                            <div class="form-check btn icon-btn">
+                              <input class="form-check-input" type="checkbox" name="phase" value="1" id="industrialDiv_4">
+                              <label class="form-check-label" for="all" value="전체선택">전체선택</label>
+                            </div>
+                        </div>
+                    </div>
+              <!-- End Card -->
+            </div>
+                    </div>
+                    <div class="vl col-2 hs-unfold">
+                        <a id="phase"class="js-hs-unfold-invoker btn btn-block btn-sm btn-white dropdown-toggle" href="javascript:;"
+                           data-hs-unfold-options='{
+                            "target": "#phaseDropdown",
+                            "type": "css-animation",
+                            "animationIn": "slideInUp"
+                           }'>투자 단계
+                        </a>
+
+                        <div id="phaseDropdown" class="hs-unfold-content dropdown-menu dropdown-menu-sm-left dropdown-card" style="min-width: 180px;">
+                            <ul class="list-group list-group-flush">
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="1" id="all" onclick="phaseAllSelect();">
+                                      <label class="form-check-label" for="all" value="전체선택">전체선택</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="2" id="noneSelect" checked onclick="phaseAllNotSelect();">
+                                      <label class="form-check-label" for="noneSelect" value="선택안함">선택안함</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase"value="1" id="noneDisclose">
+                                      <label class="form-check-label" for="noneDisclose" value="비공개">비공개</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="3" id="None">
+                                      <label class="form-check-label" for="None" value="미입력">미입력</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="4" id="SeriesA">
+                                      <label class="form-check-label" for="seriesA" value="Series A">Series A</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="5" id="SeriesB">
+                                      <label class="form-check-label" for="SeriesB" value="Series B">Series B</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="6" id="SeriesC">
+                                      <label class="form-check-label" for="SeriesC" value="Series C">Series C</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox"  name="phase" value="7" id="SeriesD">
+                                      <label class="form-check-label" for="SeriesD" value="Series D">Series D</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="8" id="Seed">
+                                      <label class="form-check-label" for="Seed" value="Seed">Seed</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="9" id="Angel">
+                                      <label class="form-check-label" for="Angel" value="Angel">Angel</label>
+                                  </div>
+                              </li>
+                              <li class="list-group-item">
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="10" id="Pre-IPO">
+                                      <label class="form-check-label" for="Pre-IPO" value="Pre-IPO">Pre-IPO</label>
+                                  </div>
+                             </li>
+                              <li class="list-group-item">
+                              <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" name="phase"  value="1" id="Pre-A">
+                                  <label class="form-check-label" for="Pre-A" value="Pre-A<">Pre-A</label>
+                              </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="vl col-3">
+                        <button class="btn btn-xs btn btn btn-outline-light btn-pill float-left"type="submit">검색</button>
+                    </div>
+                    <div class="col-2">
+                        <a id="value"class="js-hs-unfold-invoker btn btn-block btn-xs btn-outline-light btn-pill btn-white dropdown-toggle" href="javascript:;"
+                           data-hs-unfold-options='{
+                            "target": "#valueDropdown",
+                            "type": "css-animation",
+                            "animationIn": "slideInUp"
+                           }'><img src="{% static '/assets/icons/ico_filter.png'%}" alt="Logo" id="filterLogo">
+                        </a>
+                        <div id="valueDropdown" class="hs-unfold-content dropdown-menu dropdown-menu-sm-right dropdown-card" style="min-width: 400px;">
+                         <!-- Card -->
+                    <div class="card">
+                        <div class="card-body">
+                            <h4>상세 검색</h4>
+                            <div class="row">
+                                <div class="col-6">
+                                    <!-- Range Slider -->
+                                    <h6>업력</h6>
+                                    <input class="js-ion-range-slider" type="text"
+                                           data-hs-ion-range-slider-options='{
+                                             "extra_classes": "range-slider-custom range-slider-custom-grid",
+                                             "type": "double",
+                                             "grid": true,
+                                             "hide_from_to": false,
+                                             "prefix":"년",
+                                             "min": 1,
+                                             "max": 200,
+                                             "from": 25,
+                                             "to": 475,
+                                             "result_min_target_el": "#ageMin",
+                                             "result_max_target_el": "#ageMax"
+                                           }'>
+                                    <div class="d-flex justify-content-between mt-4">
+                                      <input type="text" class="form-control" id="ageMin">
+                                      <input type="text" class="form-control" id="ageMax">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <!-- Range Slider -->
+                                    <h6>누적투자유치금액</h6>
+                                    <input class="js-ion-range-slider" type="text"
+                                           data-hs-ion-range-slider-options='{
+                                             "extra_classes": "range-slider-custom range-slider-custom-grid",
+                                             "type": "double",
+                                             "grid": true,
+                                             "hide_from_to": false,
+                                             "prefix": "$",
+                                             "min": 0,
+                                             "max": 500,
+                                             "from": 25,
+                                             "to": 475,
+                                             "result_min_target_el": "#invMin",
+                                             "result_max_target_el": "#invMax"
+                                           }'>
+                                    <div class="d-flex justify-content-between mt-4">
+                                      <input type="text" class="form-control max-w-9rem" id="invMin">
+                                      <input type="text" class="form-control max-w-9rem mt-0" id="invMax">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="float-left">전체초기화</div>
+                            <div type="button" class="btn btn-primary  float-right">상세검색</div>
+                        </div>
+                    </div>
+              <!-- End Card -->
+            </div>
+<!--                        <button type="button" class="btn btn-xs btn btn btn-outline-light btn-pill ">-->
+<!--                          <img src="{% static '/assets/icons/ico_question.png' %}" alt="Logo" id="questionLogo">-->
+<!--                        </button>-->
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="listFrom" class="shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="container">
+            <div class="row">
+                <!--산업 분류 리스트-->
+                <div class="col-4">
+                    <div class="row">
+                    <div class="col-6">
+                        <div>171개의</div>
+                        <div>기업네트워크</div>
+                    </div>
+                    <div class="vl"></div>
+                    <div class="col-5">
+                        <span>8개의 산업분류</span>
+                    </div>
+                </div>
+                </div>
+                <div class="col-8">
+                    <a class="btn icon-btn" href="#">
+                    <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                    패션/추천
+                </a>
+                    <a class="btn icon-btn" href="#">
+                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                        패션/추천
+                    </a>
+                    <a class="btn icon-btn" href="#">
+                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                        패션/추천
+                    </a>
+                    <a class="btn icon-btn" href="#">
+                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                        패션/추천
+                    </a>
+                    <a class="btn icon-btn" href="#">
+                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                        패션/추천
+                    </a>
+                    <a class="btn icon-btn" href="#">
+                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                        패션/추천
+                    </a>
+                    <a class="btn icon-btn" href="#">
+                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                        패션/추천
+                    </a>
+                </div>
+              </div>
+        </div>
+    </div>
+    <div id="networkGraph">
+    </div>
+    <div class="container space-1">
+          <div class="row mx-n1">
+        <div class="col-lg px-1 mb-2 mb-lg-0">
+          <!-- Input Group -->
+          <label class="sr-only" for="searchPropertySr">Search property</label>
+          <div class="input-group input-group-sm input-group-merge">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="searchProperty">
+                <i class="fas fa-search"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" name="text" id="searchPropertySr" placeholder="Search property" aria-label="Search property" aria-describedby="searchProperty" value="London, England">
+          </div>
+          <!-- End Input Group -->
+        </div>
+
+        <div class="col-auto px-1 mb-2 mb-lg-0">
+          <!-- Unfold -->
+          <div class="hs-unfold">
+            <a class="js-hs-unfold-invoker-price btn btn-block btn-sm btn-white dropdown-toggle" href="javascript:;"
+               data-hs-unfold-options='{
+                "smartPositionOff": true,
+                "target": "#priceFilterDropdown",
+                "type": "css-animation",
+                "animationIn": "slideInUp"
+               }'>Price
+            </a>
+
+            <div id="priceFilterDropdown" class="hs-unfold-content dropdown-menu dropdown-card" style="min-width: 21rem; max-width: 21rem;">
+              <!-- Card -->
+              <div class="card">
+                <div class="card-body">
+                  <!-- Bar Chart -->
+                  <div class="position-relative overflow-hidden" style="height: 6rem; width: 18rem;">
+                    <div class="position-absolute w-100 overflow-hidden">
+                      <div style="height: 6rem; width: 18rem;">
+                        <canvas class="js-chart"
+                                data-hs-chartjs-options='{
+                                  "type": "bar",
+                                  "data": {
+                                    "labels": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                                    "datasets": [{
+                                      "data": [2, 3, 5, 7, 8, 5, 3, 2, 3, 6, 5, 4, 7, 5, 4, 3, 2],
+                                      "backgroundColor": "#e7eaf3",
+                                      "borderColor": "#e7eaf3"
+                                    }]
+                                  },
+                                  "options": {
+                                    "responsive": true,
+                                    "scales": {
+                                      "yAxes": [{
+                                        "display": false,
+                                        "gridLines": {
+                                          "display": false,
+                                          "drawBorder": false
+                                        },
+                                        "ticks": {
+                                          "beginAtZero": true
+                                        }
+                                      }],
+                                      "xAxes": [{
+                                        "display": false,
+                                        "gridLines": {
+                                          "display": false,
+                                          "drawBorder": false
+                                        }
+                                      }]
+                                    },
+                                    "tooltips": {
+                                      "custom": false
+                                    }
+                                  }
+                                }'></canvas>
+                      </div>
+                    </div>
+
+                    <div id="foregroundBarChartDoubleResult" class="position-absolute overflow-hidden">
+                      <div style="height: 6rem; width: 18rem;">
+                        <canvas class="js-chart"
+                                data-hs-chartjs-options='{
+                                  "type": "bar",
+                                  "data": {
+                                    "labels": ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                                    "datasets": [{
+                                      "data": [2, 3, 5, 7, 8, 5, 3, 2, 3, 6, 5, 4, 7, 5, 4, 3, 2],
+                                      "backgroundColor": "#377DFF",
+                                      "borderColor": "#377DFF"
+                                    }]
+                                  },
+                                  "options": {
+                                    "scales": {
+                                      "yAxes": [{
+                                        "display": false,
+                                        "gridLines": {
+                                          "display": false,
+                                          "drawBorder": false
+                                        },
+                                        "ticks": {
+                                          "beginAtZero": true
+                                        }
+                                      }],
+                                      "xAxes": [{
+                                        "display": false,
+                                        "gridLines": {
+                                          "display": false,
+                                          "drawBorder": false
+                                        }
+                                      }]
+                                    },
+                                    "tooltips": {
+                                      "custom": false
+                                    }
+                                  }
+                                }'></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- End Bar Chart -->
+
+                  <!-- Range Slider -->
+                  <input class="js-ion-range-slider" type="text" style="opacity: 0;"
+                         data-hs-ion-range-slider-options='{
+                           "type": "double",
+                           "extra_classes": "range-slider-custom",
+                           "min": 0,
+                           "max": 1000,
+                           "from": 250,
+                           "to": 750,
+                           "result_min_target_el": "#rangeSliderExampleDouble4MinResult",
+                           "result_max_target_el": "#rangeSliderExampleDouble4MaxResult",
+                           "foreground_target_el": "#foregroundBarChartDoubleResult"
+                         }'>
+
+                  <div class="row justify-content-center mt-5">
+                    <div class="col">
+                      <span class="d-block font-size-1 mb-1">Min price:</span>
+                      <input type="text" class="form-control form-control-sm" id="rangeSliderExampleDouble4MinResult">
+                    </div>
+                    <div class="col">
+                      <span class="d-block font-size-1 mb-1">Max price:</span>
+                      <input type="text" class="form-control form-control-sm" id="rangeSliderExampleDouble4MaxResult">
+                    </div>
+                  </div>
+                  <!-- End Range Slider -->
+                </div>
+
+                <div class="card-footer">
+                  <div class="d-flex justify-content-between">
+                    <a class="btn btn-sm btn-white" href="#">Clear</a>
+                    <a class="btn btn-sm btn-primary" href="#">Save</a>
+                  </div>
+                </div>
+              </div>
+              <!-- End Card -->
+            </div>
+          </div>
+          <!-- End Unfold -->
+        </div>
+
+        <div class="col-auto px-1 mb-2 mb-lg-0">
+          <!-- Unfold -->
+          <div class="hs-unfold">
+            <a class="js-hs-unfold-invoker btn btn-block btn-sm btn-white dropdown-toggle" href="javascript:;"
+               data-hs-unfold-options='{
+                "target": "#bedsFilterDropdown",
+                "type": "css-animation",
+                "animationIn": "slideInUp"
+               }'>All beds
+            </a>
+
+            <div id="bedsFilterDropdown" class="hs-unfold-content dropdown-menu dropdown-menu-sm-right dropdown-card" style="max-width: 25rem;">
+              <!-- Card -->
+              <div class="card">
+                <div class="card-body">
+                  <!-- Button Group -->
+                  <div class="btn-group btn-group-toggle btn-group-segment d-flex" data-toggle="buttons">
+                    <label class="btn btn-sm flex-fill active">
+                      <input type="radio" name="options" id="optionStudio" checked> Studio+
+                    </label>
+                    <label class="btn btn-sm flex-fill">
+                      <input type="radio" name="options" id="option1"> 1+
+                    </label>
+                    <label class="btn btn-sm flex-fill">
+                      <input type="radio" name="options" id="option2"> 2+
+                    </label>
+                    <label class="btn btn-sm flex-fill">
+                      <input type="radio" name="options" id="option3"> 3+
+                    </label>
+                    <label class="btn btn-sm flex-fill">
+                      <input type="radio" name="options" id="option4"> 4+
+                    </label>
+                  </div>
+                  <!-- End Button Group -->
+                </div>
+              </div>
+              <!-- End Card -->
+            </div>
+          </div>
+          <!-- End Unfold -->
+        </div>
+
+        <div class="col-auto px-1 mb-2 mb-lg-0">
+          <!-- Unfold -->
+
+          <!-- End Unfold -->
+        </div>
+
+        <div class="col-auto px-1 mb-2 mb-lg-0">
+          <a class="btn btn-sm btn-white" href="javascript:;" data-toggle="modal" data-target="#RealEstateMoreFiltersModal">
+            <i class="fas fa-sliders-h dropdown-item-icon"></i> More
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+        <nav class="js-mega-menu navbar navbar-expand-lg z-index-999">
+          <!-- Responsive Toggle Button -->
+          <button type="button" class="navbar-toggler btn btn-xs btn-outline-secondary ml-auto"
+                  aria-label="Toggle navigation"
+                  aria-expanded="false"
+                  aria-controls="topBar"
+                  data-toggle="collapse"
+                  data-target="#topBar">
+            Topbar <i class="fa fa-angle-down ml-2"></i>
+          </button>
+          <!-- End Responsive Toggle Button -->
+
+          <div id="topBar" class="collapse navbar-collapse">
+            <ul class="navbar-nav w-100">
+              <li class="navbar-nav-item mr-auto">
+                <a class="nav-link font-size-1 py-2 pl-0" href="../index.html">
+                  <div class="d-flex align-items-center">
+                    <svg class="mb-0 mr-1" width="16px" height="16px" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <path d="M8.22,12.72A.75.75,0,0,1,8,12.19v-.38a.77.77,0,0,1,.22-.53l5.14-5.13a.5.5,0,0,1,.71,0l.71.71a.49.49,0,0,1,0,.7L10.33,12l4.45,4.44a.5.5,0,0,1,0,.71l-.71.7a.5.5,0,0,1-.71,0Z"/>
+                    </svg> Main Demo
+                  </div>
+                </a>
+              </li>
+
+              <!-- Docs -->
+              <li class="hs-has-mega-menu navbar-nav-item"
+                  data-hs-mega-menu-item-options='{
+                    "desktop": {
+                      "position": "right",
+                      "maxWidth": "600px"
+                    }
+                  }'>
+                <a id="docsMegaMenu" class="hs-mega-menu-invoker nav-link nav-link-toggle font-size-1 py-2 pr-0" href="javascript:;" aria-haspopup="true" aria-expanded="false">Docs</a>
+
+                <!-- Docs - Submenu -->
+                <div class="hs-mega-menu dropdown-menu" aria-labelledby="docsMegaMenu" style="min-width: 600px;">
+                  <!-- Promo Item -->
+                  <div class="navbar-promo-item">
+                    <a class="navbar-promo-link" href="../documentation/index.html">
+                      <div class="media align-items-center">
+                        <img class="navbar-promo-icon" src="../assets/svg/icons/icon-2.svg" alt="SVG">
+                        <div class="media-body">
+                          <span class="navbar-promo-title">
+                            Documentation
+                            <span class="badge badge-primary badge-pill ml-1">v3.3</span>
+                          </span>
+                          <small class="navbar-promo-text">Development guides</small>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <!-- End Promo Item -->
+
+                  <!-- Promo Item -->
+                  <div class="navbar-promo-item">
+                    <a class="navbar-promo-link" href="../snippets/index.html">
+                      <div class="media align-items-center">
+                        <img class="navbar-promo-icon" src="../assets/svg/icons/icon-1.svg" alt="SVG">
+                        <div class="media-body">
+                          <span class="navbar-promo-title">Start Building</span>
+                          <small class="navbar-promo-text">Ready to use snippets</small>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <!-- End Promo Item -->
+
+                  <div class="navbar-promo-footer">
+                    <!-- List -->
+                    <div class="row no-gutters">
+                      <div class="col-6">
+                        <div class="navbar-promo-footer-item">
+                          <span class="navbar-promo-footer-text">Check what's new</span>
+                          <a class="navbar-promo-footer-text" href="../documentation/changelog.html"> Changelog</a>
+                        </div>
+                      </div>
+                      <div class="col-6 navbar-promo-footer-ver-divider">
+                        <div class="navbar-promo-footer-item">
+                          <span class="navbar-promo-footer-text">Have a question?</span>
+                          <a class="navbar-promo-footer-text" href="http://htmlstream.com/contact-us"> Contact us</a>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End List -->
+                  </div>
+                </div>
+                <!-- End Docs - Submenu -->
+              </li>
+              <!-- End Docs -->
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+    <!-- Unfold (Sidebar) -->
+<div class="hs-unfold">
+  <a class="js-hs-unfold-invoker btn btn-sm btn-secondary" href="javascript:;"
+     data-hs-unfold-options='{
+      "target": "#sidebarContent",
+      "type": "css-animation",
+      "animationIn": "fadeInRight",
+      "animationOut": "fadeOutRight",
+      "hasOverlay": "rgba(55, 125, 255, 0.1)",
+      "smartPositionOff": true
+     }'>Sidebar Toggler</a>
+</div>
+<!-- End Unfold (Sidebar) -->
+
+<!-- Sidebar Navigation -->
+<aside id="sidebarContent" class="hs-unfold-content sidebar">
+  <div class="sidebar-scroller">
+    <div class="sidebar-container">
+      <div class="sidebar-footer-offset" style="padding-bottom: 7rem;">
+        <!-- Toggle Button -->
+        <div class="d-flex justify-content-end align-items-center pt-4 px-4">
+          <div class="hs-unfold">
+            <a class="js-hs-unfold-invoker btn btn-icon btn-xs btn-soft-secondary" href="javascript:;"
+               data-hs-unfold-options='{
+                "target": "#sidebarContent",
+                "type": "css-animation",
+                "animationIn": "fadeInRight",
+                "animationOut": "fadeOutRight",
+                "hasOverlay": "rgba(55, 125, 255, 0.1)",
+                "smartPositionOff": true
+               }'>
+              <svg width="10" height="10" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M11.5,9.5l5-5c0.2-0.2,0.2-0.6-0.1-0.9l-1-1c-0.3-0.3-0.7-0.3-0.9-0.1l-5,5l-5-5C4.3,2.3,3.9,2.4,3.6,2.6l-1,1 C2.4,3.9,2.3,4.3,2.5,4.5l5,5l-5,5c-0.2,0.2-0.2,0.6,0.1,0.9l1,1c0.3,0.3,0.7,0.3,0.9,0.1l5-5l5,5c0.2,0.2,0.6,0.2,0.9-0.1l1-1 c0.3-0.3,0.3-0.7,0.1-0.9L11.5,9.5z"/>
+              </svg>
+             </a>
+          </div>
+        </div>
+        <!-- End Toggle Button -->
+
+        <!-- Content -->
+        <div class="scrollbar sidebar-body">
+          <div class="sidebar-content py-4 px-7">
+            <h4 class="h5">Sidebar content</h4>
+            <p>This is where we sit down, grab a cup of coffee and dial in the details. Understanding the task at hand and ironing out the wrinkles is a key point.</p>
+          </div>
+        </div>
+        <!-- End Content -->
+      </div>
+
+      <!-- Footer -->
+      <footer class="sidebar-footer border-top py-2 px-7">
+        <ul class="nav nav-sm">
+          <li class="nav-item">
+            <a class="nav-link pl-0" href="#">Privacy</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Terms</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="fas fa-info-circle la-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </footer>
+      <!-- End Footer -->
+    </div>
+  </div>
+</aside>
+<!-- End Sidebar Navigation -->
+<!-- chart script-->
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="{%static '/network/js/startup_graph.js'%}"></script>
+<script src="{%static '/assets/vendor/ion-rangeslider/js/ion.rangeSlider.min.js'%}"></script>
+<script>
+  $(document).on('ready', function () {
+    // INITIALIZATION OF ION RANGE SLIDER
+    // =======================================================
+    $('.js-ion-range-slider').each(function () {
+      $.HSCore.components.HSIonRangeSlider.init($(this));
+    });
+  });
+</script>
+
+
+{% endblock %}

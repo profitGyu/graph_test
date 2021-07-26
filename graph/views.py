@@ -43,13 +43,8 @@ class GraphAPI(APIView):
             "Accept": "application/json",
             'Access-Control-Allow-Origin': '*',
         }
-        # query = "MATCH p=(a:Startup)-[:LINKED]-(b:Startup) RETURN p limit 100"
-        # query = "MATCH p=(a:Startup)-[:LINKED]-(b:Startup) RETURN p limit 300"
-        # query = "MATCH p=(a:Startup)-[:LINKED]-(b:Startup) RETURN p"
-        # query = "MATCH p=(a:Startup)-[:LINKED]-(b:Startup) where a.name='소셜빈' RETURN p"
-        # query = "match p= (a:Startup{name:'소셜빈'})-[:LINKED]-(b:Startup)-[:LINKED]-(c:Startup) return p"
-        # query = "match p=(b:Startup)-[:LINKED]-(c:Startup) where exists{ match (a:Startup)-[:LINKED]->(b) where a.name = '소셜빈'} return p"
-        query = 'MATCH p=(a:Startup)-[:LINKED]-(b:Startup) where a.name = "디밀" return p'
+  
+        query = 'MATCH p=(a:Startup)-[:LINKED]-(b:Startup) return p'
         data = {
             "statements": [{
                 "statement": query,
@@ -58,6 +53,7 @@ class GraphAPI(APIView):
         }
         res = requests.post(URL, headers=headers, data=json.dumps(data, ensure_ascii=False).encode('utf-8'))
         data = res.json()
+
         am_data = self.convert_first(data)
 
         return Response(am_data)

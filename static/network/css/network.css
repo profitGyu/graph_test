@@ -1,0 +1,120 @@
+
+/*logo size */
+#logodiv1, #logo {
+    width:200px;
+    height:50px
+
+}
+.card{
+    border-radius: 0px;
+}
+.list-group-item{
+    border-radius: 0px;
+}
+#undernav{
+    background: #FAFAFA;
+    padding-top: 30px;
+}
+/* 서치바 폼 */
+#searchForm{
+    padding-top:10px;
+    padding-bottom:2px;
+    width: auto;
+    height: 50px;
+    background: #374B6F;
+    color: white;
+}
+#searchForm > .container > .row{
+    padding-top:20px
+}
+#industral, #phase{
+    border: none;
+    box-shadow: none;
+    font-size: 15px;
+    height: 15px;
+    background: #374B6f;
+    color: white;
+}
+#company{
+    height:20px;
+    color:white;
+    font-size: 15px;
+    padding-left: 5px;
+
+}
+.vl {
+  border-left: 1px solid #FFFFFF;
+  height: 30px;
+}
+
+/*네트워크 카테고르 리스트*/
+#listFrom{
+    height:154px;
+    background: #FAFAFA;
+    border-bottom: 2px solid #E6E6E6
+}
+
+#listFrom .vl {
+  border-left: 2px solid gray;
+  height: 50px;
+}
+#listFrom > .container > .row{
+        padding-top: 10px;
+}
+.btn-glyphicon {
+    padding:8px;
+    background:blue;
+    border-radius:75px;
+    margin-right:4px;
+}
+.icon-btn {
+    border-radius:50px;
+    background: #FFFFFF;
+    border-color:#C4C4C4;
+    padding-top: 1px;
+    color: black;
+    padding: 1px;
+    margin-top: -30px;
+    padding-right: 20px;
+    margin-top: 5px;
+    margin-left: 1px;
+
+ /* create gap between buttons for display, you can remove this*/
+}
+.xyz {
+        background-size: auto;
+        text-align: center;
+        padding-top: 100px;
+        }
+.btn-circle.btn-sm {
+    width: 17px;
+    height: 17px;
+    margin-bottom: 3px;
+    padding: 4px 0px;
+    border-radius: 50%;
+    font-size: 8px;
+    text-align:center;
+    background:blue;
+    margin-left: 10px;
+    margin-right: 5px;
+
+}
+#networkGraph{
+    height:500px
+
+}
+.circle{
+    background-color:blue;
+    width:50px;
+    height:50px;
+    border-radius:75px;
+    text-align:center;
+    font-size:12px;
+    vertical-align:middle;
+
+}
+#filterLogo, #questionLogo {
+    width:20px;
+    height:20px;
+}
+
