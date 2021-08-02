@@ -78,9 +78,13 @@
     padding-right: 20px;
     margin-top: 5px;
     margin-left: 1px;
-
- /* create gap between buttons for display, you can remove this*/
+    margin-right: 10px;
 }
+.indus{
+    color:#2894E9;
+
+}
+
 .xyz {
         background-size: auto;
         text-align: center;

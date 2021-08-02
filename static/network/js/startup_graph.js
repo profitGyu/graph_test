@@ -1,187 +1,218 @@
-    const ROOT_PATH = location.protocol + '//' + location.host
-    console.log(ROOT_PATH)
-    $.ajax({
-        url: ROOT_PATH+'/api/v1',
-        type:"GET",
-        data:{
-
-        },
-        dataType:'json',
-        success:function(data){
+const ROOT_PATH = location.protocol + '//' + location.host
+console.log(ROOT_PATH)
 
 
-        am4core.useTheme(am4themes_animated);
-        // Themes end
-        console.log(data)
-        var chart = am4core.create("networkGraph", am4plugins_forceDirected.ForceDirectedTree);
 
 
-    // Do the normal stuff for this function
+// 페이지 첫 시작시 생성 되어야하는 것들
+$().ready(function(){
 
-        var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
-        networkSeries.dataFields.linkWith = "linkWith";
-        networkSeries.dataFields.name = "name";
-        networkSeries.dataFields.id = "name";
-        networkSeries.dataFields.value = "value";
-        networkSeries.dataFields.children = "children";
-        networkSeries.dataFields.color = "color"
-        networkSeries.maxLevels =1
-        networkSeries.nodes.template.label.text = "{name}"
-        networkSeries.fontSize = 15;
-        networkSeries.linkWithStrength = 0;
+    $('.js-ion-range-slider').each(function () {
+      $.HSCore.components.HSIonRangeSlider.init($(this));
+    });
+//  산업 분류 드롭다운
+    var industrialClassList = $('#industrialClassList')
+    industrialClassList.empty()
+    color_list = Object.keys(INDUSTRIAL_DICT)
+    color_list.forEach(color => makeIndustrialCheckbox(industrialClassList, color))
 
-        networkSeries.minRadius = 10;
-        networkSeries.maxRadius = 30;
-        chart.zoomable = true;
-
-
-        var nodeTemplate = networkSeries.nodes.template;
-        nodeTemplate.tooltipText = "{name}";
-        nodeTemplate.fillOpacity = 1;
-        nodeTemplate.label.hideOversized = true;
-        nodeTemplate.label.truncate = true;
+// 투자 단계 드롭다운
+    var phaseCheckBox = $("#phaseCheckBox")
+    phaseCheckBox.empty()
+    phase_list = Object.keys(PHASE_DICT)
+    phase_list.forEach(phase => makePhaseCheckbox(phaseCheckBox, phase))
+});
 
 
-<!--        chart.legend = new am4charts.Legend();-->
 
-
-        var linkTemplate = networkSeries.links.template;
-        linkTemplate.strokeWidth = 1;
-        var linkHoverState = linkTemplate.states.create("hover");
-        linkHoverState.properties.strokeOpacity = 1;
-        linkHoverState.properties.strokeWidth = 2;
-        networkSeries.data =data
-        nodeTemplate.events.on("over", function (event) {
-            var dataItem = event.target.dataItem;
-            dataItem.childLinks.each(function (link) {
-                link.isHover = true;
-            })
-        })
-
-        nodeTemplate.events.on("out", function (event) {
-            var dataItem = event.target.dataItem;
-            dataItem.childLinks.each(function (link) {
-                link.isHover = false;
-            })
-        })
-
-        }
-
-    })
+//$.ajax({
+//        url: ROOT_PATH+'/api/v1',
+//        type:"GET",
+//        data:{
 //
-    function phaseAllSelect(){
-       phase=$('input[name="phase"]')
-       phase.attr('checked', true)
+//        },
+//        dataType:'json',
+//        success:function(data){
+//            console.log("안녕~")
+//        }
+//
+//    })
+
+/*검색 하여 네트워크 그래프 생성*/
+function getNetworkGraph(){
+
+    var company = $('#company').val()
+    var phase= $('input[name="phase"]:checked')
+    var industrial = $("input[name='industrialDiv']:checked")
+    var capital = $('#capital').val()
+    var ageMin = $('#ageMin').val()
+    var ageMax = $('#ageMax').val()
+    var invMin = $('#invMin').val()
+    var invMax = $('#invMax').val()
+
+    var phase_list = []
+    phase.each(function(){
+        phase_list.push(this.value)
+    })
+
+    var industrial_list = []
+    industrial.each(function(){
+        industrial_list.push(this.value)
+    })
+    if(industrial_list.length===0){
+        industrial_list.push('')
     }
-    function phaseAllNotSelect(){
-        phase=$('input[name="phase"]')
-        phase.attr('checked', false)
-        $('this').attr('checked', true)
+    console.log(industrial_list)
+    $.ajax({
+    url: ROOT_PATH+'/api/v1/',
+    type:"POST",
+    data:{
+        "company": company,
+        "industrial": industrial_list,
+        "phase": phase_list,
+        "capital": capital
+    },
+    dataType:'json',
+    success:function(data){
+        console.log(data)
+        data_count = data.length-1
+         /*산업 분류 테그 생성 START*/
+        var industrialTagFrom = $('#industrialTagFrom')
+        var color_list = data[data_count]["color_list"]
+        industrialTagFrom.empty()
+        for(color in color_list){
+            makeIndustrialTag(industrialTagFrom ,color_list[color])
+        }
+        /* 산업분류 태그 생성 END*/
+
+        var networkCount = $('#networkCount')
+        var IndustrialCount = $('#IndustrialCount')
+        networkCount.empty()
+        makeListFromCountTag(networkCount, data_count)
+        IndustrialCount.empty()
+        makeListFromCountTag(IndustrialCount, color_list.length)
+        /*네트워크 그래프 생성*/
+        data.pop()
+        MakeStartupNetworkChart(data);
+
+    },
+    error: function(data){
+        alert("검색결과가 없습니다.")
     }
+    })
+}
 
 
-    function local(){
-        var company = $('#company').val()
-        var query = $('input[name="phase"]:checked')
-        var industrial = $('#industrial').val()
-        var phase = $('#phase').val()
-        var capital = $('#capital').val()
-        phase_list = []
-        query.each(function(e){
-             phase_list.push(e)
-        })
-        $.ajax({
-        url: ROOT_PATH+'/api/v1/',
+/* 산업 분류 책크박스 설정 하는 함수 */
+function getCategoryList(){
+    console.log("산업분류 클릭 확인:")
+    var company = $('#company').val()
+    var industrialClassList = $('#industrialClassList')
+    $.ajax({
+        url: ROOT_PATH+'/api/v1/category',
         type:"POST",
         data:{
             "company": company,
-            "industrial": industrial,
-            "phase": phase,
-            "capital": capital
         },
         dataType:'json',
         success:function(data){
-            am4core.useTheme(am4themes_animated);
-        // Themes end
-        var chart = am4core.create("chartdiv", am4plugins_forceDirected.ForceDirectedTree);
+            /* 산업 분류 창 만들어주는 함수*/
+            industrial_data = data["color_list"]
+            var industrialClassList = $('#industrialClassList')
+            industrialClassList.empty()
+            color_list = Object.keys(INDUSTRIAL_DICT)
+            color_list.forEach(color => makeIndustrialCheckbox(industrialClassList, color))
+            var industrial = $(".industrialCheckbox")
+            industrial.prop('disabled', true)
+            exist_list = []
+            industrial_data.forEach(val => exist_list.push(INDUSTRIAL_DICT[val]))
 
-        var networkSeries = chart.series.push(new am4plugins_forceDirected.ForceDirectedSeries())
-        networkSeries.dataFields.linkWith = "link";
-        networkSeries.dataFields.name = "name";
-        networkSeries.dataFields.id = "id";
-        networkSeries.dataFields.value = "value";
-        networkSeries.dataFields.children = "children";
-        networkSeries.dataFields.color = "color"
-        networkSeries.maxLevels =1
-        networkSeries.nodes.template.label.text = "{name}"
-        networkSeries.fontSize = 10;
-        networkSeries.linkWithStrength = 0;
+            for(i=0; i<industrial.length; i++){
+                exist_list.forEach(function(val){
+                    console.log(industrial[i].value)
+                    if(val == industrial[i].value){
+                        industrial[i].disabled = false;
+                    }
+                })
+            }
 
-        networkSeries.nodes.template.label.verticalCenter = "bottom";
-        networkSeries.nodes.template.label.dy = -15;
-        networkSeries.nodes.template.label.fill = am4core.color("#000");
-
-        networkSeries.minRadius = 10;
-        networkSeries.maxRadius = 10;
-
-        networkSeries.centerStrength = 2;
-        var nodeTemplate = networkSeries.nodes.template;
-        nodeTemplate.tooltipText = "{name}";
-        nodeTemplate.fillOpacity = 1;
-        nodeTemplate.label.hideOversized = true;
-        nodeTemplate.label.truncate = true;
-
-
-<!--        chart.legend = new am4charts.Legend();-->
-
-
-        var linkTemplate = networkSeries.links.template;
-        linkTemplate.strokeWidth = 1;
-        var linkHoverState = linkTemplate.states.create("hover");
-        linkHoverState.properties.strokeOpacity = 1;
-        linkHoverState.properties.strokeWidth = 2;
-        networkSeries.data =data
-       networkSeries.dragFixedNodes = true;
-        networkSeries.nodes.template.events.on("dragstop", function(event) {
-          event.target.dataItem.fixed = true;
-        })
-
-networkSeries.nodes.template.events.on("down", function(event) {
-  event.target.dataItem.fixed = false;
-})
-// end of disabling physics
-
-networkSeries.nodes.template.events.on("over", function(event) {
-  console.log(event.target.dataItem)
-  event.target.dataItem.childLinks.each(function(link) {
-    link.isHover = true;
-  })
-    if (event.target.dataItem.linkWith){
-    event.target.dataItem.linkWith.isHover =true;
-  }
-  if (event.target.dataItem.parentLink) {
-    event.target.dataItem.parentLink.isHover = true;
-  }
-
-})
-
-networkSeries.nodes.template.events.on("out", function(event) {
-  event.target.dataItem.childLinks.each(function(link) {
-    link.isHover = false;
-  })
-  if (event.target.dataItem.parentLink) {
-    event.target.dataItem.parentLink.isHover = false;
-  }
-})
-
-
-
-
-        },
-        error: function(data){
-            alert("검색결과가 없습니다.")
+            /* 검색시 존재하는 투자 단계만 보여주기 */
+            phase_data = data["phase_list"]
+            var phaseCheckbox = $(".phaseCheckbox")
+            phaseCheckbox.prop('disabled', true)
+            exist_phase_list = []
+            phase_data.forEach(val => exist_phase_list.push(PHASE_DICT[val]))
+              for(i=0; i<phaseCheckbox.length; i++){
+                exist_phase_list.forEach(function(val){
+                    if(val == phaseCheckbox[i].value){
+                        phaseCheckbox[i].disabled = false;
+                    }
+                })
+            }
         }
-        })
-    }
+    })
+}
 
+
+function getCategoryList(category){
+    console.log(category)
+    console.log("산업분류 클릭 확인:")
+    var company = $('#company').val()
+    var industrialClassList = $('#industrialClassList')
+    $.ajax({
+        url: ROOT_PATH+'/api/v1/category',
+        type:"POST",
+        data:{
+            "company": company,
+        },
+        dataType:'json',
+        success:function(data){
+            /* 산업 분류 창 만들어주는 함수*/
+            if(category === "industrial"){
+               industrial_data = data["color_list"]
+                var industrialClassList = $('#industrialClassList')
+                industrialClassList.empty()
+                color_list = Object.keys(INDUSTRIAL_DICT)
+                color_list.forEach(color => makeIndustrialCheckbox(industrialClassList, color))
+                var industrial = $(".industrialCheckbox")
+                industrial.prop('disabled', true)
+                exist_list = []
+                industrial_data.forEach(val => exist_list.push(INDUSTRIAL_DICT[val]))
+
+                for(i=0; i<industrial.length; i++){
+                    exist_list.forEach(function(val){
+                        if(val == industrial[i].value){
+                            industrial[i].disabled = false;
+                        }
+                    })
+                }
+            }else if(category === "phase"){
+                   /* 검색시 존재하는 투자 단계만 보여주기 */
+                var phaseCheckBox = $("#phaseCheckBox")
+                phaseCheckBox.empty()
+                phase_list = Object.keys(PHASE_DICT)
+                phase_list.forEach(phase => makePhaseCheckbox(phaseCheckBox, phase))
+                phase_data = data["phase_list"]
+                var phaseCheckbox = $(".phaseCheckbox")
+                phaseCheckbox.prop('disabled', true)
+                exist_phase_list = []
+                phase_data.forEach(val => exist_phase_list.push(PHASE_DICT[val]))
+                  for(i=0; i<phaseCheckbox.length; i++){
+                    exist_phase_list.forEach(function(val){
+                        if(val == phaseCheckbox[i].value){
+                            phaseCheckbox[i].disabled = false;
+                        }
+                    })
+                }
+                var noneSelect = $("#noneSelect")
+                var all = $('#all')
+                noneSelect.prop("checked", false)
+                all.prop('disabled', false)
+            }
+
+
+
+        }
+    })
+}
 

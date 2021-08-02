@@ -15,7 +15,7 @@
     </div>
     <div id="searchForm">
         <div class="container">
-            <form action="javascript:local();" method="post">
+            <form action="javascript:getNetworkGraph();" method="post">
                 <div class="row">
                     <!--  기업 키워드 검색바 -->
                     <div class="col-3">
@@ -33,7 +33,7 @@
                             "target": "#industal",
                             "type": "css-animation",
                             "animationIn": "slideInUp"
-                           }'>산업 분류
+                           }', onclick="getCategoryList('industrial');">산업 분류
                         </a>
 
                         <div id="industal" class="hs-unfold-content dropdown-menu dropdown-menu-sm-right dropdown-card" style="min-width: 600px;">
@@ -44,22 +44,10 @@
                             <span>여러 개의 산업분류를 선택할 수 있습니다.</span>
                         </div>
 
-                        <div class="card-footer">
+                        <div class="card-footer" id="industrialClassList">
                             <div class="form-check btn icon-btn">
-                              <input class="form-check-input" type="checkbox" name="phase" value="1" id="industrialDiv_1">
-                              <label class="form-check-label" for="all" value="전체선택">패션/추천</label>
-                            </div>
-                            <div class="form-check btn icon-btn">
-                              <input class="form-check-input " type="checkbox" name="phase" value="1" id="industrialDiv_2">
-                              <label class="form-check-label" for="all" value="전체선택">카테고리</label>
-                            </div>
-                            <div class="form-check btn icon-btn">
-                              <input class="form-check-input" type="checkbox" name="phase" value="1" id="industrialDiv_3">
-                              <label class="form-check-label" for="all" value="전체선택">전체선택</label>
-                            </div>
-                            <div class="form-check btn icon-btn">
-                              <input class="form-check-input" type="checkbox" name="phase" value="1" id="industrialDiv_4">
-                              <label class="form-check-label" for="all" value="전체선택">전체선택</label>
+                              <input class="form-check-input" type="checkbox" name="industrialDiv" value="0" id="industrialDiv_1">
+                              <label class="form-check-label" for="all" value="0">#771DAE</label>
                             </div>
                         </div>
                     </div>
@@ -72,83 +60,17 @@
                             "target": "#phaseDropdown",
                             "type": "css-animation",
                             "animationIn": "slideInUp"
-                           }'>투자 단계
+                           }' onclick="getCategoryList('phase')";>투자 단계
                         </a>
 
                         <div id="phaseDropdown" class="hs-unfold-content dropdown-menu dropdown-menu-sm-left dropdown-card" style="min-width: 180px;">
-                            <ul class="list-group list-group-flush">
+                            <ul class="list-group list-group-flush" id="phaseCheckBox">
                               <li class="list-group-item">
                                   <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="1" id="all" onclick="phaseAllSelect();">
+                                      <input class="form-check-input" type="checkbox" name="phase" value="0" id="all" onclick="phaseAllSelect();">
                                       <label class="form-check-label" for="all" value="전체선택">전체선택</label>
                                   </div>
                               </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="2" id="noneSelect" checked onclick="phaseAllNotSelect();">
-                                      <label class="form-check-label" for="noneSelect" value="선택안함">선택안함</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase"value="1" id="noneDisclose">
-                                      <label class="form-check-label" for="noneDisclose" value="비공개">비공개</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="3" id="None">
-                                      <label class="form-check-label" for="None" value="미입력">미입력</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="4" id="SeriesA">
-                                      <label class="form-check-label" for="seriesA" value="Series A">Series A</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="5" id="SeriesB">
-                                      <label class="form-check-label" for="SeriesB" value="Series B">Series B</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="6" id="SeriesC">
-                                      <label class="form-check-label" for="SeriesC" value="Series C">Series C</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox"  name="phase" value="7" id="SeriesD">
-                                      <label class="form-check-label" for="SeriesD" value="Series D">Series D</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="8" id="Seed">
-                                      <label class="form-check-label" for="Seed" value="Seed">Seed</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="9" id="Angel">
-                                      <label class="form-check-label" for="Angel" value="Angel">Angel</label>
-                                  </div>
-                              </li>
-                              <li class="list-group-item">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" name="phase" value="10" id="Pre-IPO">
-                                      <label class="form-check-label" for="Pre-IPO" value="Pre-IPO">Pre-IPO</label>
-                                  </div>
-                             </li>
-                              <li class="list-group-item">
-                              <div class="form-check">
-                                  <input class="form-check-input" type="checkbox" name="phase"  value="1" id="Pre-A">
-                                  <label class="form-check-label" for="Pre-A" value="Pre-A<">Pre-A</label>
-                              </div>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -161,7 +83,7 @@
                             "target": "#valueDropdown",
                             "type": "css-animation",
                             "animationIn": "slideInUp"
-                           }'><img src="{% static '/assets/icons/ico_filter.png'%}" alt="Logo" id="filterLogo">
+                           }'><img src="{% static '/assets/icons/ico_filter.png'%}" alt="filter" id="filterLogo">
                         </a>
                         <div id="valueDropdown" class="hs-unfold-content dropdown-menu dropdown-menu-sm-right dropdown-card" style="min-width: 400px;">
                          <!-- Card -->
@@ -199,12 +121,12 @@
                                              "extra_classes": "range-slider-custom range-slider-custom-grid",
                                              "type": "double",
                                              "grid": true,
-                                             "hide_from_to": false,
-                                             "prefix": "$",
+                                             "hide_from_to": true,
                                              "min": 0,
                                              "max": 500,
                                              "from": 25,
                                              "to": 475,
+                                             "prefix": " 년",
                                              "result_min_target_el": "#invMin",
                                              "result_max_target_el": "#invMax"
                                            }'>
@@ -216,8 +138,8 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <div class="float-left">전체초기화</div>
-                            <div type="button" class="btn btn-primary  float-right">상세검색</div>
+                            <div class="float-left text-secondary text-highlight-secondary">전체초기화</div>
+                            <button type="submit" class="btn btn-primary btn-sm btn-pill float-right">상세검색</button>
                         </div>
                     </div>
               <!-- End Card -->
@@ -237,36 +159,21 @@
                 <!--산업 분류 리스트-->
                 <div class="col-4">
                     <div class="row">
-                    <div class="col-6">
-                        <div>171개의</div>
-                        <div>기업네트워크</div>
+                    <div class="col-6" id="networkCount">
+                        <span class="indus font-size-2">171개</span><span>의</span>
+                        <div class="font-size-1">기업네트워크</div>
                     </div>
                     <div class="vl"></div>
-                    <div class="col-5">
-                        <span>8개의 산업분류</span>
+                    <div class="col-5" id="IndustrialCount">
+                        <span class="indus font-size-2">8개</span><span>의</span>
+                        <div class="font-size-1">산업분류</div>
                     </div>
                 </div>
                 </div>
-                <div class="col-8">
+                <div class="col-8" id="industrialTagFrom">
                     <a class="btn icon-btn" href="#">
-                    <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
+                    <button type="button" class="btn btn-banger btn-circle btn-sm" style="background:red"></button>
                     패션/추천
-                </a>
-                    <a class="btn icon-btn" href="#">
-                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
-                        패션/추천
-                    </a>
-                    <a class="btn icon-btn" href="#">
-                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
-                        패션/추천
-                    </a>
-                    <a class="btn icon-btn" href="#">
-                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
-                        패션/추천
-                    </a>
-                    <a class="btn icon-btn" href="#">
-                        <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
-                        패션/추천
                     </a>
                     <a class="btn icon-btn" href="#">
                         <button type="button" class="btn btn-banger btn-circle btn-sm"></button>
@@ -281,6 +188,7 @@
         </div>
     </div>
     <div id="networkGraph">
+
     </div>
     <div class="container space-1">
           <div class="row mx-n1">
@@ -666,17 +574,11 @@
 <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/plugins/forceDirected.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="{%static '/network/js/startup_fuc.js'%}"></script>
+<script src="{%static '/network/js/graph.js'%}"></script>
 <script src="{%static '/network/js/startup_graph.js'%}"></script>
 <script src="{%static '/assets/vendor/ion-rangeslider/js/ion.rangeSlider.min.js'%}"></script>
-<script>
-  $(document).on('ready', function () {
-    // INITIALIZATION OF ION RANGE SLIDER
-    // =======================================================
-    $('.js-ion-range-slider').each(function () {
-      $.HSCore.components.HSIonRangeSlider.init($(this));
-    });
-  });
-</script>
+
 
 
 {% endblock %}
