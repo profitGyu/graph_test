@@ -3,12 +3,6 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 import pprint
 
-COLOR_CATEGORY = {'#b5e1a2': 'AI', '#3b7cb7': '빅데이터', '#f8864f': '인공지능', '#f46d43': '블록체인', '#f0f9a7': 'NTF',
-                  '#3b92b9': '컨설팅', '#da464d': '클라우드', '#feec9f': '마켓팅', '#e6f598': '할리우드',
-                  '#fdb768': '반도체', '#fff8b4': '친환경', '#fecc7b': '소셜네트워크', '#fee08b': '디자인', '#c9314c': '물리학',
-                  '#9cd7a4': '건축학', '#e75948': '생체공학', '#50a9af': '철학', '#fafdb7': '화학',
-                  '#fba05b': '조선업', '#81cda5': '신생에너지', '#cfec9d': '컨슈머'}
-
 INDUSTRIAL_DICT = {'#771DAE': '0', '#67DC75': '1', '#2A1DBD': '2', '#F83F97': '3', '#F1B200': '4','#F30259': '5', '#009E4F': '6', '#0058FF': '7',
               '#FD7D20': '8', '#FF3100': '9', '#7151A5': '10', '#036174': '11', '#303173': '12','#ECA406': '13', '#5C33F6': '14',
               '#B8307C': '15', '#0C5C22': '16', '#0085FF': '17', '#FD7159': '18', '#6A75B3': '19','#A367DC': '20'}
@@ -59,6 +53,15 @@ class Match_query(serializers.Serializer):
         result = match + where + return_query
         return result
 
+    def make_with_query(self, with_list, category=None):
+        if category == "phase":
+            category = "phases"
+        elif category == "industrial":
+            category = "industrialClass"
+        with_query = "with {1} as {2} ".format(with_list, category)
+
+        return with_query
+
 
     def make_multy_where(self,val_list):
 
@@ -93,7 +96,6 @@ class Match_query(serializers.Serializer):
         match = "MATCH p=(a:Startup)-[:LINKED]-(b:Startup) "
         return_query = " return p"
         print(industrial, phase, company)
-        print(len(industrial))
         # 회사나 키워드 값 선택시
         if company:
             if industrial != ['']:
@@ -108,7 +110,7 @@ class Match_query(serializers.Serializer):
                 return_query = ' return p'
                 query = self.total_guery(match, where_query, return_query)
                 noe4j_data = self.get_neo4j(query)
-                result = self.convert_multy_query_company(noe4j_data, company)
+                result = self.convert_multy_query_company(noe4j_data, company, color="blue")
 
                 return result
 
@@ -117,13 +119,13 @@ class Match_query(serializers.Serializer):
                 phase_list = []
                 for i in phase:
                     phase_list.append(PHASE_DICT[i])
-                with_query = "with {} as phases ".format(phase_list)
+                with_query = self.make_with_query(phase_list, "phase")
                 match = "match p = (a:Startup)-[:LINKED]-(b:Startup) "
-                where_query = "where ( a.name='{}' or '{}' in a.keywords) and (b.phase in phases) return b".format(company, company)
+                where_query = "where ( a.name='{1}' or '{1}' in a.keywords) and (b.phase in phases) return b".format(company)
                 query = with_query + match + where_query
                 print(query)
                 noe4j_data = get_neo4j(query)
-                result = self.convert_multy_query_company(noe4j_data, company, "phase")
+                result = self.convert_multy_query_company(noe4j_data, company, "phase", color="skyblue")
 
                 return result
             else:
@@ -138,25 +140,52 @@ class Match_query(serializers.Serializer):
         #  산업분류 선택시
         if industrial != ['']:
             if len(industrial) == 1:
-                print("산업분류 하나일 경우")
+                """산업 분류가 한개인 경우 """
                 industrial = industrial[0]
                 color = [color for color, index in INDUSTRIAL_DICT.items() if index == industrial]
-                where_query = "where a.color='{}' and b.color='{}'".format(color[0], color[0])
-                return_query = " return p"
-                query = self.total_guery(match, where_query, return_query)
-                noe4j_data = self.get_neo4j(query)
-                result = self.convert_one_category(noe4j_data)
+                if phase != ['1']:
+                    ''' 산업 분류 가 한개이고 투자 단계가 여러개 인 경우 '''
+                    phase_list = []
+                    for i in phase:
+                        phase_list.append(PHASE_DICT[i])
+                    with_query = "with {} as phases ".format(phase_list)
+                    match = "match p = (a:Startup)-[:LINKED]-(b:Startup) "
+                    where_query = "where a.color='{0}' and b.color='{0}' and b.phase in phases ".format(color[0])
+                    return_query = "return b limit 150"
+                    query = with_query + match + where_query + return_query
+                    print(query)
+                    noe4j_data = get_neo4j(query)
+                    print(color)
+                    result = self.convert_multy_query_company(noe4j_data, industrial, "phase", color=color[0])
+                    return result
+                else:
+                    where_query = "where a.color='{}' and b.color='{}'".format(color[0], color[0])
+                    return_query = " return p"
+                    query = self.total_guery(match, where_query, return_query)
+                    noe4j_data = get_neo4j(query)
+                    result = self.convert_one_category(noe4j_data)
+                    return result
             else:
                 print("산업분류 여러개일 경우")
-                color_list =[]
+                color_list = []
                 for i in industrial:
                     color_list.append([color for color, index in INDUSTRIAL_DICT.items() if index == i][0])
+                if phase != ['1']:
+                    phase_list = []
+                    for i in phase:
+                        phase_list.append(PHASE_DICT[i])
+                    with_query = "with {} as phases ".format(phase_list)
+                    query = self.make_limit_union_multy_query(color_list, "color")
+                    query_test = "with ['전체선택', '미입력', 'Series A', 'Series B', 'Series C', 'Series D', 'Seed', 'Angel', 'Pre-IPO', 'Pre-A'] as phases match p=(a:Startup)-[:LINKED]-(b:Startup) WITH collect(p) as out match p=(a:Startup)-[:LINKED]-(b:Startup) where (a.color='#2A1DBD' and b.color='#2A1DBD') WITH apoc.coll.intersection(out,collect(p)) as out RETURN out "
+                    noe4j_data = self.get_neo4j(query_test)
+                    result = self.convert_multy_query_company(noe4j_data, industrial, "phase", color=color_list[0])
+                    return result
+                else:
+                    query = self.make_limit_union_multy_query(color_list, "color")
+                    noe4j_data = self.get_neo4j(query)
+                    result = self.convert_multy_data(noe4j_data)
 
-                query = self.make_limit_union_multy_query(color_list, "color")
-                noe4j_data = self.get_neo4j(query)
-                result = self.convert_multy_data(noe4j_data)
-
-            return result
+                return result
 
         if phase != ['1']:
             print("투자 단계")
@@ -208,7 +237,7 @@ class Match_query(serializers.Serializer):
 
     def convert_one_category(self, data):
 
-        color_category = COLOR_CATEGORY
+        color_category = INDUSTRIAL_DICT
         nodes = []
         edges = []
         nodenum = []
@@ -250,9 +279,10 @@ class Match_query(serializers.Serializer):
         nodes.append({"color_list":list(set(color_list))})
         return nodes
 
-    def convert_multy_query_company(self, data, company_name, category=None):
+    def convert_multy_query_company(self, data, company_name, category=None, color="skyblue"):
 
-        chart_data = {"name": company_name, "value":"100", "color": "blue", "children": []}
+
+        chart_data = {"name": company_name, "value":"100", "color": color, "children": []}
 
         if category == "phase":
             data = self.convert_multy_data(data, company_name, category)

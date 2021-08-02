@@ -18,8 +18,8 @@ async function MakeStartupNetworkChart(data){
         networkSeries.nodes.template.label.dy = -15;
         networkSeries.nodes.template.label.fill = am4core.color("#000");
 
-        networkSeries.minRadius = 10;
-        networkSeries.maxRadius = 20;
+        networkSeries.minRadius = 20;
+        networkSeries.maxRadius = 30;
 
         networkSeries.centerStrength = 1;
         var nodeTemplate = networkSeries.nodes.template;
